@@ -62,10 +62,14 @@ func (roomManager *RoomManager) OutHandler(conn *common.Connection) error {
 				message := fmt.Sprintf("%s 断开连接", player.NickName)
 				roomManager.Rooms[i].Message = message
 
+				wsResponse := WsResponse{}
+				wsResponse.Type = "outConn"
+				wsResponse.Data = roomManager.Rooms[i]
+
 				var data []byte
 				var err error
 
-				if data, err = json.Marshal(roomManager.Rooms[i]); err != nil {
+				if data, err = json.Marshal(&wsResponse); err != nil {
 					return err
 				}
 
